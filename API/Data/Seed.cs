@@ -19,11 +19,8 @@ namespace API.Data
 
             foreach (var user in users)
             {
-                using var hmac = new HMACSHA512();
 
                 user.UserName = user.UserName.ToLower();
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("154410north"));
-                user.PasswordSalt = hmac.Key;
 
                 context.Users.Add(user);
             }
