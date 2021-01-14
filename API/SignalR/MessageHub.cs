@@ -33,9 +33,10 @@ namespace API.SignalR
             var group = await AddToGroup(groupName);
             await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
-            if(_unitOfWork.HasChanges()) await _unitOfWork.Complete();
             
             var messages = await _unitOfWork.MessageRepository.GetMessageThread(Context.User.GetUsername(), otherUser);
+
+            if(_unitOfWork.HasChanges()) await _unitOfWork.Complete();
 
             await Clients.Caller.SendAsync("ReceiveMessageThread", messages);
         }
@@ -70,7 +71,7 @@ namespace API.SignalR
             var groupName = GetGroupName(sender.UserName, recipient.UserName);
 
             var group = await _unitOfWork.MessageRepository.GetMessageGroup(groupName);
-            System.Console.WriteLine(group);
+            
             if (group.Connections.Any(x => x.Username == recipient.UserName))
             {
                 message.DateRead = DateTime.UtcNow;
