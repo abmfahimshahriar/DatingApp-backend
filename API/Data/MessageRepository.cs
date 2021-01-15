@@ -117,15 +117,15 @@ namespace API.Data
             // return messages;
 
             var query = _context.Messages
-                               .Where(m =>
-                m.Recipient.UserName == currentUserUsername
-                && m.RecipientDeleted == false
-                && m.Sender.UserName == recipientUsername
-                || m.Recipient.UserName == recipientUsername
-                && m.Sender.UserName == currentUserUsername
-                && m.SenderDeleted == false)
-                               .OrderBy(m => m.MessageSent)
-                               .AsQueryable();
+                .Where(m =>
+                    m.Recipient.UserName == currentUserUsername
+                    && m.RecipientDeleted == false
+                    && m.Sender.UserName == recipientUsername
+                    || m.Recipient.UserName == recipientUsername
+                    && m.Sender.UserName == currentUserUsername
+                    && m.SenderDeleted == false)
+                .OrderBy(m => m.MessageSent)
+                .AsQueryable();
 
             var unreadQuery = query.Where(el => el.DateRead == null && el.Recipient.UserName == currentUserUsername);
             await unreadQuery.ForEachAsync(el => el.DateRead = DateTime.UtcNow);
